@@ -26,6 +26,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 
+# Notebooks
+notebooks/logs/*
+
 # Virtual environments
 .venv/
 venv/
