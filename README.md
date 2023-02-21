@@ -26,6 +26,7 @@
 * [ ] Make a python autocompletion engine
   * [ ] Hook into VSCode as an extension
   * [ ] Follow evaluation up with [CodeGen](https://github.com/salesforce/CodeGen)
+* [ ] Enable resumable training w/ checkpoints
 
 * [ ] Investigate tooling like the following:
   * https://github.com/hwchase17/langchain

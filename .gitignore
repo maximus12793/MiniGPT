@@ -28,6 +28,7 @@ share/python-wheels/
 
 # Notebooks
 notebooks/logs/*
+notebooks/lightning_logs/*
 
 # Virtual environments
 .venv/

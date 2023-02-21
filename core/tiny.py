@@ -1,4 +1,6 @@
 from torch import nn
+import torch
+import ipdb
 import torch.nn.functional as F
 from torch import optim
 import pytorch_lightning as pl
@@ -54,9 +56,11 @@ class GPTSimple(pl.LightningModule):
         nn.init.xavier_uniform_(self.ff.weight)
         nn.init.xavier_uniform_(self.output.weight)
 
-    def forward(self, x):
+    def forward(self, input_ids, attention_mask):
         # Get the embedding of the input sequence.
-        embedded = self.embedding(x)
+        embedded = self.embedding(input_ids)
+        # Apply the attention mask to the embedding.
+        embedded = embedded * attention_mask.unsqueeze(-1)
         # Transpose the output of the embedding layer so that it has shape (seq_len, batch_size, embed_dim).
         embedded = embedded.transpose(0, 1)
         # Apply the Transformer encoder to the embedded input sequence.
@@ -74,19 +78,18 @@ class GPTSimple(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         # Get the inputs from the batch.
-        print(batch)
-        print(batch.shape)
-        inputs = batch
-
+        input_ids = batch["input_ids"]
+        attention_mask = batch["attention_mask"]
+        ipdb.set_trace()
         # Compute the logits.
-        logits = self(inputs)
-
+        logits = self(input_ids, attention_mask)
+        # Flatten the logits and inputs tensors to be 2D.
+        logits = logits.view(-1, self.config.vocab_size)
+        inputs = input_ids.view(-1)
         # Calculate the loss.
-        loss = F.cross_entropy(logits.view(-1, self.config.vocab_size), inputs.view(-1))
-
+        loss = F.cross_entropy(logits, inputs)
         # Log the training loss.
         self.log("train_loss", loss, on_epoch=True)
-
         return {"loss": loss}
 
     def configure_optimizers(self):
