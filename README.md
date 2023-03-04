@@ -37,4 +37,5 @@
 ### Implementation Phases
 1. Pair program with GPT
 2. Follow guides
+3. License taggging
 
