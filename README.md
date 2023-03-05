@@ -9,6 +9,8 @@
 
 
 
+
+
 # General Note
 
 ### Useful Links
@@ -20,11 +22,13 @@
 * https://github.com/Lightning-AI/lightning-GPT
 
 ### Goals
-* [x] Implement core GPT-2 features
+* [x] Implement core GPT-2 architecture 
   * Extend this to the following:
     * GPU integration
     * LLVM compilation & training
     * Text generation
+    * [ ] Complete loss fn
+    * [ ] Add generator function (512 tokens)
 * [ ] Make a python autocompletion engine
   * [ ] Hook into VSCode as an extension
   * [ ] Follow evaluation up with [CodeGen](https://github.com/salesforce/CodeGen)

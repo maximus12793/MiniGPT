@@ -1,6 +1,5 @@
-from torch import nn
 import torch
-import ipdb
+from torch import nn
 import torch.nn.functional as F
 from torch import optim
 import pytorch_lightning as pl
@@ -11,13 +10,31 @@ Example GPT1 configuration.
 class GPT1Config(GPTConfig):
   num_attention_heads = 12
   num_blocks = 12 # number of layers
-  embed_dim = 768
-  vocab_size = 50_257
+  embed_dim = 768 # number of embedding dimensions
+  vocab_size = 50_257 # vocabulary size
 
 1. Embedding layer
 2. Stack of transformer encoder
 3. Final layer 
 """
+
+class GPTConfig:
+  attn_dropout = 0.1
+  embed_dropout = 0.1
+  ff_dropout = 0.1
+
+  def __init__(
+        self, vocab_size, max_len, **kwargs
+    ):
+        self.vocab_size = vocab_size
+        self.max_len = max_len
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+class GPT2Config(GPTConfig):
+  num_attention_heads = 12 # number of attention heads in transformer
+  num_blocks = 12 # number of layers
+  embed_dim = 768 # number of embedding dimensions
 
 
 class GPTSimple(pl.LightningModule):
@@ -83,13 +100,21 @@ class GPTSimple(pl.LightningModule):
         # Get the inputs from the batch.
         input_ids = batch["input_ids"]
         attention_mask = batch["attention_mask"]
+
+        # Shifted by 1
+        shifted_inputs = torch.roll(input_ids, shifts=1)
+        shifted_inputs[:, 0] = 0 # Set the first token to 0
+
         # Compute the logits.
-        logits = self(input_ids, attention_mask)
-        # Flatten the logits and inputs tensors to be 2D.
-        logits = logits.view(-1, self.config.vocab_size)
-        inputs = input_ids.view(-1)
-        # Calculate the loss.
-        loss = F.cross_entropy(logits, inputs)
+        input_logits = self(input_ids, attention_mask)
+        target_logits = self(shifted_inputs, attention_mask)
+
+        # Flatten the logits and targets tensors to be 2D.
+        input_logits = input_logits.view(-1, self.config.vocab_size)
+        target_logits = target_logits.view(-1, self.config.vocab_size)
+
+        # Calculate the loss and ignore the padding token.
+        loss = F.cross_entropy(input_logits, target_logits)
         # Log the training loss.
         self.log("train_loss", loss, on_epoch=True)
         return {"loss": loss}
