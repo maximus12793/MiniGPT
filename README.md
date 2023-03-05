@@ -17,6 +17,7 @@
 * https://jaykmody.com/blog/gpt-from-scratch/
 * https://www.youtube.com/watch?v=kCc8FmEb1nY
 * https://www.youtube.com/watch?v=d7IRM40VMYM
+* https://github.com/Lightning-AI/lightning-GPT
 
 ### Goals
 * [x] Implement core GPT-2 features
