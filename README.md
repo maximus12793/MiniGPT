@@ -14,6 +14,7 @@
 ### Useful Links
 * https://github.com/karpathy/minGPT
 * https://www.kaggle.com/code/shashwatwork/mini-gpt-experiment-karpathy
+* https://jaykmody.com/blog/gpt-from-scratch/
 * https://www.youtube.com/watch?v=kCc8FmEb1nY
 * https://www.youtube.com/watch?v=d7IRM40VMYM
 
