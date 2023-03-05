@@ -22,6 +22,7 @@
 * https://github.com/Lightning-AI/lightning-GPT
 
 ### Goals
+* [ ] Fix GPU integration
 * [x] Implement core GPT-2 architecture 
   * Extend this to the following:
     * GPU integration

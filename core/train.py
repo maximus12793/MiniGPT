@@ -70,13 +70,18 @@ valid_dataset = valid_dataset.with_format("torch")
 valid_loader = DataLoader(valid_dataset, batch_size=32)# Load the preprocessed GPT-2 dataset from Hugging Face.
 
 # Define the GPTSimple model and the optimizer
-config = GPT2Config(vocab_size=50257, max_len=512)
+# Note: We must use len(tokenizer) as tokenizer.voacb size is a fixed attribute
+config = GPT2Config(vocab_size=len(tokenizer), max_len=512)
 model = GPTSimple(config)
+
+# Create a logger object
+logger = TensorBoardLogger("logs/", name="gpt2")
 
 # Define pl Trainer object.
 trainer = pl.Trainer(
     gpus=0,
     accelerator='cpu',
     max_epochs=10,
+    logger=logger,
 )
 trainer.fit(model, train_loader)

@@ -3,6 +3,7 @@ from torch import nn
 import torch.nn.functional as F
 from torch import optim
 import pytorch_lightning as pl
+import ipdb
 
 """
 Example GPT1 configuration.
@@ -76,8 +77,11 @@ class GPTSimple(pl.LightningModule):
         nn.init.xavier_uniform_(self.output.weight)
 
     def forward(self, input_ids, attention_mask):
-        # Get the embedding of the input sequence.
-        embedded = self.embedding(input_ids)
+        try:
+            # Get the embedding of the input sequence.
+            embedded = self.embedding(input_ids)
+        except:
+            ipdb.set_trace()
         # Apply the attention mask to the embedding.
         embedded = embedded * attention_mask.unsqueeze(-1)
         # Transpose the output of the embedding layer so that it has shape (seq_len, batch_size, embed_dim).
