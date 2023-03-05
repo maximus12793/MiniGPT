@@ -78,9 +78,8 @@ class GPTSimple(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         # Get the inputs from the batch.
-        input_ids = batch["input_ids"]
-        attention_mask = batch["attention_mask"]
-        ipdb.set_trace()
+        input_ids = torch.tensor(batch["input_ids"])
+        attention_mask = torch.tensor(batch["attention_mask"])
         # Compute the logits.
         logits = self(input_ids, attention_mask)
         # Flatten the logits and inputs tensors to be 2D.
