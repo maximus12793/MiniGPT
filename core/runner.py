@@ -42,7 +42,7 @@ train_dataset = load_dataset(
 )
 train_dataset = train_dataset.map(
     lambda x: tokenizer(x["content"], truncation=True, padding="max_length"),
-    batched=True,
+    batched=False,
     remove_columns=["content", "repo_name", "path", "copies", "size", "license"],
 )
 train_dataset = train_dataset.shuffle(seed=42, buffer_size=1000)
@@ -55,7 +55,7 @@ valid_dataset = load_dataset(
 )
 valid_dataset = valid_dataset.map(
     lambda x: tokenizer(x["content"], truncation=True, padding="max_length"),
-    batched=True,
+    batched=False,
     remove_columns=["content", "repo_name", "path", "copies", "size", "license"],
 )
 valid_dataset = valid_dataset.shuffle(seed=42, buffer_size=1000)
