@@ -10,7 +10,11 @@ from torch.utils.data import DataLoader
 import torch.nn.functional as F
 from pytorch_lightning.loggers import TensorBoardLogger
 from transformers import AutoTokenizer
+from transformers import DataCollatorWithPadding
 from datasets import load_dataset
+
+# TODO: Update these.
+MAX_LENGTH = 512
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained("gpt2")
@@ -41,24 +45,32 @@ train_dataset = load_dataset(
     "huggingface-course/codeparrot-ds-train", streaming=True, split="train"
 )
 train_dataset = train_dataset.map(
-    lambda x: tokenizer(x["content"], truncation=True, padding="max_length"),
-    batched=False,
+    lambda x: tokenizer(x["content"], truncation=True, padding="max_length", max_length=512),
+    batched=True,
+    batch_size=12,
     remove_columns=["content", "repo_name", "path", "copies", "size", "license"],
 )
-train_dataset = train_dataset.shuffle(seed=42, buffer_size=1000)
+
+# train_dataset = train_dataset.shuffle(seed=42, buffer_size=1000)
 train_dataset = train_dataset.with_format("torch")
-train_loader = DataLoader(train_dataset, batch_size=32)
+
+# define collator function that dynamically pads batches
+collator_fn = DataCollatorWithPadding(tokenizer=tokenizer, padding=True, return_tensors="pt")
+train_loader = DataLoader(train_dataset, batch_size=4, collate_fn=collator_fn)
+
+# for batch in train_loader:
+#     print("X")
 
 # Set up the DataLoader for the validation data
 valid_dataset = load_dataset(
     "huggingface-course/codeparrot-ds-valid", streaming=True, split="validation"
 )
 valid_dataset = valid_dataset.map(
-    lambda x: tokenizer(x["content"], truncation=True, padding="max_length"),
+    lambda x: tokenizer(x["content"], truncation=True, padding="max_length", max_length=512),
     batched=False,
     remove_columns=["content", "repo_name", "path", "copies", "size", "license"],
 )
-valid_dataset = valid_dataset.shuffle(seed=42, buffer_size=1000)
+# valid_dataset = valid_dataset.shuffle(seed=42, buffer_size=1000)
 valid_dataset = valid_dataset.with_format("torch")
 valid_loader = DataLoader(valid_dataset, batch_size=32)# Load the preprocessed GPT-2 dataset from Hugging Face.
 

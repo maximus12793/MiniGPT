@@ -51,6 +51,8 @@ class GPTSimple(pl.LightningModule):
             config.embed_dim,  # Number of expected features in the input (i.e., the size of the last hidden layer of the Transformer encoder).
             config.vocab_size,  # Number of output features (i.e., the size of the vocabulary).
         )
+        # Applies the Gaussian Error Linear Units function.
+        self.gelu = nn.GELU()
         # Initialize the weights of the model using Xavier initialization.
         nn.init.xavier_uniform_(self.embedding.weight)
         nn.init.xavier_uniform_(self.ff.weight)
@@ -69,17 +71,18 @@ class GPTSimple(pl.LightningModule):
         last_encoded = encoded[-1]
         # Apply the feedforward layer to the last encoded sequence, followed by the GELU activation.
         ff_output = self.ff(last_encoded)
-        gelu_output = nn.GELU(ff_output)
+        gelu_output = self.gelu(ff_output)
         # Project the output of the feedforward layer back into the original vocabulary space.
         output = self.output(gelu_output)
         # Apply the Softmax function to the output to get a probability distribution over the vocabulary.
         probs = F.softmax(output, dim=-1)
+        # Note: Returns a distribution over all vocab_size.
         return probs
 
     def training_step(self, batch, batch_idx):
         # Get the inputs from the batch.
-        input_ids = torch.tensor(batch["input_ids"])
-        attention_mask = torch.tensor(batch["attention_mask"])
+        input_ids = batch["input_ids"]
+        attention_mask = batch["attention_mask"]
         # Compute the logits.
         logits = self(input_ids, attention_mask)
         # Flatten the logits and inputs tensors to be 2D.
