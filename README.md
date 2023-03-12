@@ -20,6 +20,7 @@
 * https://www.youtube.com/watch?v=kCc8FmEb1nY
 * https://www.youtube.com/watch?v=d7IRM40VMYM
 * https://github.com/Lightning-AI/lightning-GPT
+* https://openai.com/blog/introducing-chatgpt-and-whisper-apis
 
 ### Goals
 * [ ] Fix GPU integration
@@ -34,6 +35,7 @@
   * [ ] Hook into VSCode as an extension
   * [ ] Follow evaluation up with [CodeGen](https://github.com/salesforce/CodeGen)
 * [ ] Enable resumable training w/ checkpoints
+* [ ] Integrate with https://pre-commit.com/
 
 * [ ] Investigate tooling like the following:
   * https://github.com/hwchase17/langchain
