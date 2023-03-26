@@ -30,6 +30,7 @@
 
 ### Goals
 * [ ] Fix GPU integration
+* [ ] Check that VAE is properly encoding/decoding
 * [x] Implement core GPT-2 architecture 
   * Extend this to the following:
     * GPU integration

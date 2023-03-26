@@ -33,6 +33,7 @@ class TextVAE(nn.Module):
         return z
 
     def decode(self, z, max_len, device):
+        # Decode the latent vector
         batch_size = z.size(0)
         hidden = torch.zeros(batch_size, self.hidden_dim).to(device)
         cell = torch.zeros(batch_size, self.hidden_dim).to(device)
@@ -51,3 +52,16 @@ class TextVAE(nn.Module):
 
         outputs = torch.stack(outputs, dim=1)
         return outputs
+    
+    def forward(self, x, max_len, device):
+        # Forward pass
+        z_mean, z_logvar = self.encode(x)
+        z = self.reparameterize(z_mean, z_logvar)
+        outputs = self.decode(z, max_len, device)
+        return outputs, z_mean, z_logvar
+    
+    def loss_function(self, decoded, x, z_mean, z_logvar):
+        # Loss function
+        recon_loss = F.cross_entropy(decoded.view(-1, self.vocab_size), x.view(-1), reduction='sum')
+        kld_loss = -0.5 * torch.sum(1 + z_logvar - z_mean.pow(2) - z_logvar.exp())
+        return recon_loss + kld_loss
