@@ -22,6 +22,12 @@
 * https://github.com/Lightning-AI/lightning-GPT
 * https://openai.com/blog/introducing-chatgpt-and-whisper-apis
 
+### Implementation Guides
+*  [https://blog.paperspace.com/sentence-embeddings-pytorch-lightning/](https://blog.paperspace.com/sentence-embeddings-pytorch-lightning/)
+* [https://sachinruk.github.io/blog/deep-learning/2022/09/25/grammar-correction-via-gpt2.html](https://sachinruk.github.io/blog/deep-learning/2022/09/25/grammar-correction-via-gpt2.html)
+* [https://neptune.ai/blog/how-to-code-bert-using-pytorch-tutorial](https://neptune.ai/blog/how-to-code-bert-using-pytorch-tutorial)
+* [https://course.fast.ai/](https://course.fast.ai/)
+
 ### Goals
 * [ ] Fix GPU integration
 * [x] Implement core GPT-2 architecture 
