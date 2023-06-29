@@ -1,6 +1,3 @@
-import sys
-sys.path.append('../')
-
 import pytorch_lightning as pl
 from model import GPTSimple, GPT2Config
 from datasets import load_dataset
